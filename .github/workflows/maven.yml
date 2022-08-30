@@ -26,3 +26,11 @@ jobs:
       run: mvn -B package --file pom.xml
     - name: List target
       run: ls -lart target/
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-west-2
+    - name: Deploy
+      run: aws lambda update-function-code --function-name MethodHandlerLambda --zip-file fileb://./target/exercise-plan-generator-1.0-SNAPSHOT.jar
